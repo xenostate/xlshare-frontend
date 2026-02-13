@@ -2,13 +2,15 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 // Pick API base in this order:
 // 1) Explicit env (Vercel/Netlify build)
-// 2) If running on vercel.app, default to the deployed backend
-// 3) Localhost for dev
+// 2) If on localhost -> local backend
+// 3) Otherwise -> deployed backend
 const API_BASE =
   import.meta.env.VITE_API_BASE ||
-  (typeof window !== "undefined" && window.location.hostname.endsWith("vercel.app")
-    ? "https://xlshare-backend.onrender.com"
-    : "http://127.0.0.1:8000");
+  (typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1")
+      ? "http://127.0.0.1:8000"
+      : "https://xlshare-backend.onrender.com");
 
 export default function App() {
   const [view, setView] = useState(null);
